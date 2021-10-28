@@ -1,0 +1,154 @@
+#include<iostream>
+#include<stdlib.h>
+#include<fstream>
+#include<string.h>
+#define LEN 80
+char buf[80];
+using namespace std;
+class student
+{
+	private:char name[25],age[3],usn[11];
+		void pack();
+		void unpack();
+	public:	void add();
+		void display();
+		void modify();
+		void search();
+};
+
+void student::pack()
+{
+	strcpy(buf,usn);
+	strcat(buf,"|");
+	strcat(buf,name);
+	strcat(buf,"|");
+	strcat(buf,age);
+       // strcat(buf,"|");
+	strcat(buf,"#");
+}
+
+void student::unpack()
+{
+	strcpy(usn,strtok(buf,"|"));
+	strcpy(name,strtok(NULL,"|"));
+	strcpy(age,strtok(NULL,"#"));
+}
+
+void student::add()
+{
+	cout<<"Enter student name/usn/age\n";
+	cin>>name>>usn>>age;
+	pack();
+	ofstream file;
+	file.open("vlr1.txt",ios::app);
+	file<<buf<<endl;
+	cout<<"Record added\n";
+	file.close();
+}
+void student::display()
+{
+	ifstream file;
+	cout<<"The student name/age/usn are\n";
+	file.open("vlr1.txt",ios::in);
+	while(!file.eof())
+	{
+		file.getline(buf,80,'#');
+		if(file.fail())break;
+		unpack();
+		cout<<name<<" "<<age<<" "<<usn<<endl;
+		
+	}
+	file.close();
+}
+void student::search()
+{
+	char key[11];
+	ifstream file;
+	file.open("vlr1.txt",ios::in);
+	cout<<"\nEnter usn to be searched:";
+	cin>>key;
+	while(!file.eof())
+	{
+		file.getline(buf,80,'#');
+		if(file.fail())
+			break;
+		unpack();
+		if(!strcmp(usn,key))
+		{
+		cout<<"\nStudent found\n";
+		cout<<usn<<" "<<name<<" "<<age;
+		file.close();
+		exit(0);
+		}
+	}
+	cout<<"\nStudent not found with usn "<<key;
+ }
+void student::modify()
+{
+	char key[11];
+	char buf1[80][80];int i,n,flag=0;
+	ifstream file;
+	file.open("vlr1.txt",ios::in);
+	for(i=0;!file.eof();i++)
+	{
+		file.getline(buf1[i],80,'#');
+		if(file.fail())break;
+	}
+	n=i;
+	cout<<"\nEnter the usn to be searched:";
+	cin>>key;
+	for(i=0;i<n;i++)
+	{
+		strcpy(buf,buf1[i]);
+		unpack();
+		if(!strcmp(usn,key))
+		{
+			flag=1;
+			cout<<"\nStudent found\n";
+			cout<<"Enter the new name:";
+			cin>>name;
+			cout<<"Enter the new usn:";
+			cin>>usn;
+			cout<<"Enter the new age:";
+			cin>>age;
+		}
+			pack();
+			strcpy(buf1[i],buf);
+	}
+                        ofstream file1;
+			file1.open("vlr1.txt",ios::out);
+			for(i=0;i<n;i++)
+				file1<<buf1[i]<<endl;
+			file1.close();
+                        //exit(0);
+                        
+	if(flag==0)	
+	 cout<<"Record not found"<<endl;
+	
+	file.close();
+}
+
+int main()
+{
+	student s;
+	int choice;
+	while(1)
+	{
+	cout<<"Enter choice\n1:add\n2:display\n3:search\n4:modify\n6:Quit:";
+	cin>>choice;
+	switch(choice)
+	{
+	case 1:s.add();
+		break;
+	
+	case 2:s.display();
+		break;
+	case 3:s.search();
+		break;
+	case 4:s.modify();
+		break;
+	default:exit(0);
+	}
+	}
+	return 0;
+}

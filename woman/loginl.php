@@ -171,19 +171,22 @@ if ($result1->num_rows > 0) {
     while($row1 = $result1->fetch_assoc()) {
        //echo "<tr><td>".$row1["domain"]."</td><td>".$row1["teach"]." ".$row1["name"]."</td></tr>";
 	  echo "NAME :".$row1["name"]."<br></br> ADDRESS:".$row1["address"]. "<br></br>PHONE NO:".$row1["phone"]. "<br></br>EMAIL ID:".$row1["email"]. "<br></br>LINKED IN:".$row1["linkedin"]. "<br></br>SHE WANTS TO TEACH:".$row1["teach"]. "<br></br>HER RECOMMENDATIONS:".$row1["recommendation"]. "<br></br>HER DOMAIN:".$row1["domain"]. "<br></br>REQUIRES :".$row1["pay"]."<br></br>" ;
-	   $name=$row['name'];
-	   $sql2="SELECT * from review where teacher_name='$name'";
-	   $result2=$conn->query($sql2);
-	   if ($result2->num_rows > 0) {
-		   while($row2 = $result2->fetch_assoc()) {
-			    echo "RATING:".$row2["rating"]."<br></br>FEEDBACK:".$row2["comments"]. "<br></br>" ;
-			   
-		   }
-	   }
+	$name1=$row1['name'];	   
+	$sql2 = "SELECT * from review where teacher_name = '$name1'";
+	$result2= $conn->query($sql2);
+	 
+       if($result2->num_rows > 0){
+	 while($row2 = $result2->fetch_assoc()) {	
+		echo "RATING :".$row2["rating"]."<br></br>";
+		//echo "Rating of the Teacher.'$name1' is .$row2["rating"]";}	 
+}
+}
+  
 	   
 	//echo "successful login";
 	
     }
+  
 }
    // echo "</table>";
  else {
